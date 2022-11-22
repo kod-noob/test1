@@ -7,8 +7,9 @@ module Main exposing (fromFahrenheit, main)
 -- The import statements list modules that we want to use.
 
 import Browser
-import Html exposing (Html, button, div, text)
-import Html.Events exposing (onClick)
+import Html exposing (Html, button, div, input, p, text)
+import Html.Attributes exposing (style)
+import Html.Events exposing (onClick, onInput)
 
 
 
@@ -31,7 +32,10 @@ main =
 
 
 type alias Model =
-    { count : Int }
+    { count : Int
+    , fahrenheit : Maybe Float
+    , celsius : Maybe Float
+    }
 
 
 
@@ -39,8 +43,13 @@ type alias Model =
 
 
 init : flags -> ( Model, Cmd message )
-init flags =
-    ( { count = 0 }, Cmd.none )
+init _ =
+    ( { count = 0
+      , fahrenheit = Nothing
+      , celsius = Nothing
+      }
+    , Cmd.none
+    )
 
 
 
@@ -50,6 +59,7 @@ init flags =
 type Message
     = Increment
     | Decrement
+    | ChangedFahrenheit String
 
 
 
@@ -69,6 +79,20 @@ update message model =
         -- The decrement message! Let's decrement.
         Decrement ->
             ( { model | count = model.count - 1 }, Cmd.none )
+
+        ChangedFahrenheit s ->
+            ( { model
+                | fahrenheit = String.toFloat s
+                , celsius =
+                    case String.toFloat s of
+                        Nothing ->
+                            Nothing
+
+                        Just f ->
+                            fromFahrenheit f |> Just
+              }
+            , Cmd.none
+            )
 
 
 
@@ -98,6 +122,29 @@ view model =
 
         -- The third thing is the decrement button which is similar to the increment button.
         , button [ onClick Decrement ] [ text "-1" ]
+        , viewConverter model
+        ]
+
+
+viewConverter : Model -> Html Message
+viewConverter model =
+    div [ style "border" "solid" ]
+        [ div [ style "width" "350px" ]
+            [ text "Fahrenheit to Celsius"
+            ]
+        , div []
+            [ input [ onInput ChangedFahrenheit ] []
+            ]
+        , div []
+            [ text "Celsius: "
+            , text <|
+                case model.celsius of
+                    Nothing ->
+                        " "
+
+                    Just c ->
+                        String.fromFloat c
+            ]
         ]
 
 
