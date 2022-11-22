@@ -1,8 +1,15 @@
 module Tests exposing (..)
 
-import Test exposing (Test)
+import Expect exposing (FloatingPointTolerance(..))
+import Main
+import Test exposing (Test, describe, test)
 
 
 suite : Test
 suite =
-    Test.todo "Implement the first test. See https://package.elm-lang.org/packages/elm-explorations/test/latest for how to do this!"
+    describe "Converter tests"
+        [ test "Test temparature convert 32" <|
+            \_ -> Expect.equal (Main.fromFahrenheit 32) 0.0
+        , test "Test temparature convert 100" <|
+            \_ -> Expect.within (Absolute 0.1) (Main.fromFahrenheit 100) 37.7
+        ]

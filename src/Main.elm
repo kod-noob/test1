@@ -2,7 +2,7 @@
 -- It exposes (make available externally of this module) one function "main".
 
 
-module Main exposing (main)
+module Main exposing (fromFahrenheit, main)
 
 -- The import statements list modules that we want to use.
 
@@ -109,3 +109,12 @@ view model =
 subscriptions : Model -> Sub message
 subscriptions model =
     Sub.none
+
+
+
+-- Here goes my biz logic
+
+
+fromFahrenheit : Float -> Float
+fromFahrenheit fahrenheit =
+    (fahrenheit - 32) * 5 / 9
