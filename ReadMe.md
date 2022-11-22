@@ -29,3 +29,4 @@ SyntaxError: Unexpected token '?'
     at Function.Module._load (internal/modules/cjs/loader.js:708:14)
     at Function.executeUserEntryPoint [as runMain] (internal/modules/run_main.js:60:12)
 ```
+Fixed by installing nvm and then nvm install --lts
